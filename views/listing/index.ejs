@@ -1,0 +1,105 @@
+<% layout("layouts/boilerplate") %>
+<div id="filters">
+    <div class="filter">
+        <a href="/listings?category=Trending" style="text-decoration: none; color: inherit;">
+            <div><i class="fa-solid fa-fire"></i></div>
+            <p>Trending</p>
+        </a>
+    </div>
+    <div class="filter">
+        <a href="/listings?category=Rooms" style="text-decoration: none; color: inherit;">
+            <div><i class="fa-solid fa-bed"></i></div>
+            <p>Rooms</p>
+        </a>
+    </div>
+    <div class="filter">
+        <a href="/listings?category=Iconic cities" style="text-decoration: none; color: inherit;">
+            <div><i class="fa-solid fa-city"></i></div>
+            <p>Iconic cities</p>
+        </a>
+    </div>
+    <div class="filter">
+        <a href="/listings?category=Mountains" style="text-decoration: none; color: inherit;">
+            <div><i class="fa-solid fa-mountain-city"></i></div>
+            <p>Mountains</p>
+        </a>
+    </div>
+    <div class="filter">
+        <a href="/listings?category=Castles" style="text-decoration: none; color: inherit;">
+            <div><i class="fa-brands fa-fort-awesome"></i></div>
+            <p>Castles</p>
+        </a>
+    </div>
+    <div class="filter">
+        <a href="/listings?category=Amazing Pools" style="text-decoration: none; color: inherit;">
+            <div><i class="fa-solid fa-person-swimming"></i></div>
+            <p>Amazing Pools</p>
+        </a>
+    </div>
+    <div class="filter">
+        <a href="/listings?category=Campings" style="text-decoration: none; color: inherit;">
+            <div><i class="fa-solid fa-campground"></i></div>
+            <p>Campings</p>
+        </a>
+    </div>
+    <div class="filter">
+        <a href="/listings?category=Farms" style="text-decoration: none; color: inherit;">
+            <div><i class="fa-solid fa-cow"></i></div>
+            <p>Farms</p>
+        </a>
+    </div>
+    <div class="filter">
+        <a href="/listings?category=Arctic" style="text-decoration: none; color: inherit;">
+            <div><i class="fa-solid fa-igloo"></i></div>
+            <p>Arctic</p>
+        </a>
+    </div>
+    <div class="filter">
+        <a href="/listings?category=Arctic" style="text-decoration: none; color: inherit;">
+            <div><i class="fa-solid fa-sailboat"></i></i></div>
+            <p>Boats</p>
+        </a>
+    </div>
+    <div class="filter">
+        <a href="/listings?category=Arctic" style="text-decoration: none; color: inherit;">
+            <div><i class="fa-solid fa-hill-avalanche"></i></div>
+            <p>Hills</p>
+        </a>
+    </div>
+    <div class="switch">
+        <div class="form-check-reverse form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+            <label class="form-check-label ss" for="flexSwitchCheckDefault "> Display price with Taxes </label>
+          </div>
+    </div>
+</div>
+
+
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+    <% for(let listing of allListings) { %>
+        <a href="/listings/<%= listing._id %>" class="card listing-card" style="text-decoration: none; color: inherit;">
+            <img src="<%= listing.image.url %>" class="card-img-top" alt="image" style="height: 15rem;"/>
+            <div class="card-img-overlay"></div>
+            <div class="card-body">
+                <b><p class="card-text"><%= listing.title %></b><br>
+                &#8377; <%= listing.price %> / Night
+                &nbsp; &nbsp; <i class="tax-info" style="display: none;">+15% tax</i>
+                </p>
+            </div>
+        </a>
+    <% } %>
+</div>
+
+<script>
+    let taxSwitch=document.getElementById("flexSwitchCheckDefault");
+    taxSwitch.addEventListener("click",()=>{
+    let taxInfo= document.getElementsByClassName("tax-info")
+    for(info of taxInfo){
+        if(info.style.display!="inline"){
+            info.style.display= "inline";
+        }else{
+            info.style.display= "none";
+        }
+    }
+    })
+</script>
