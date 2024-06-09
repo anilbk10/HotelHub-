@@ -1,6 +1,8 @@
 # HotelHub
 
 HotelHub is a web application designed to streamline the process of listing and reviewing hotels. With HotelHub, users can explore various hotel listings, leave reviews, and interact with other users. This project is built using Node.js, Express.js, MongoDB, and Passport.js for authentication.
+
+## Direct link
 **Check out the deployed project [here](https://hotelhub-86n8.onrender.com/listings).**
 ## Features
 
