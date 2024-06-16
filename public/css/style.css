@@ -151,7 +151,16 @@ footer {
     margin-bottom: 1rem;
   }
   .show-img {
-    height: 20vh;
+    height: 30vh;
+  }
+  .card-body {
+    font-size: 0.9rem;
+  }
+  .starability-result {
+    font-size: 0.8rem;
+  }
+  .review-card {
+    margin-right: 0;
   }
 }
 
@@ -176,9 +185,15 @@ footer {
     margin-bottom: 1rem;
   }
   .show-img {
-    height: 20vh;
+    height: 25vh;
   }
-  .filter {
-    margin-right: 1rem;
+  .card-body {
+    font-size: 0.8rem;
+  }
+  .starability-result {
+    font-size: 0.7rem;
+  }
+  .review-card {
+    margin-right: 0;
   }
 }
