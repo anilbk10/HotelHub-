@@ -23,7 +23,7 @@
 
         <br />
 
-  
+        <% if (currentUser && currentUser._id.equals(listing.owner._id)) { %>
         <div class="btns">
           <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark">Edit</a>
 
@@ -35,7 +35,7 @@
           </form>
         </div>
        
-
+ <% } %>
         <% if (currentUser) { %>
         <div class="col-12">
           <hr />
