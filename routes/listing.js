@@ -25,7 +25,7 @@ router.get("/new", isloggedin, controller.renderNewForm);
 router.route("/:id")
 .put(isloggedin,isowner, upload.single('listing[image]'),wrapAsync(controller.update))
 .get(wrapAsync(controller.show))
-.delete(isloggedin,isowner,wrapAsync(controller.delete));
+.delete(wrapAsync(controller.delete));
 
 //Edit route
 router.get("/:id/edit",isloggedin,isowner,wrapAsync(controller.edit)
