@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Listing = require("../models/listing.js");
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 let mapToken = process.env.MAP_TOKEN;
@@ -5,7 +6,18 @@ let mapToken = process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
 module.exports.index = async (req, res) => {
-  const allListings = await Listing.find({});
+  let allListings = [];
+  try {
+    if (mongoose.connection.readyState === 1) {
+      allListings = await Listing.find({});
+    } else {
+      console.warn("MongoDB is not connected (readyState !== 1).");
+      req.flash("error", "Database is temporarily unreachable. Please check your MongoDB Atlas cluster connection.");
+    }
+  } catch (err) {
+    console.error("Error retrieving listings:", err.message || err);
+    req.flash("error", "Database query failed. Please verify your MongoDB Atlas cluster.");
+  }
   res.render("listing/index.ejs", { allListings });
 };
 
