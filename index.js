@@ -85,6 +85,40 @@ if (dbUrl && process.env.USE_MEMORY_STORE !== "true") {
     store.on("error", (err) => {
       console.warn("Mongo session store error event:", err?.message || err);
     });
+
+    // Wrap store methods to prevent unhandled store errors from causing 500 Internal Server Error
+    const originalGet = store.get.bind(store);
+    store.get = function (sid, cb) {
+      originalGet(sid, (err, sess) => {
+        if (err) return cb(null, null);
+        return cb(null, sess);
+      });
+    };
+
+    const originalSet = store.set.bind(store);
+    store.set = function (sid, sess, cb) {
+      originalSet(sid, sess, (err) => {
+        if (typeof cb === "function") return cb(null);
+      });
+    };
+
+    const originalTouch = store.touch ? store.touch.bind(store) : null;
+    if (originalTouch) {
+      store.touch = function (sid, sess, cb) {
+        originalTouch(sid, sess, (err) => {
+          if (typeof cb === "function") return cb(null);
+        });
+      };
+    }
+
+    const originalDestroy = store.destroy ? store.destroy.bind(store) : null;
+    if (originalDestroy) {
+      store.destroy = function (sid, cb) {
+        originalDestroy(sid, (err) => {
+          if (typeof cb === "function") return cb(null);
+        });
+      };
+    }
   } catch (err) {
     console.warn("Failed to initialize MongoStore, using MemoryStore fallback:", err.message);
   }
@@ -111,7 +145,12 @@ app.use(passport.initialize()); // A middleware that initializes passport
 app.use(passport.session());
 passport.use(new LocalStrategy(user.authenticate())); // Generates a function that is used in Passport's LocalStrategy
 passport.serializeUser(user.serializeUser()); // Generates a function that is used by Passport to serialize(store) users into the session
-passport.deserializeUser(user.deserializeUser());
+passport.deserializeUser((id, done) => {
+  if (mongoose.connection.readyState !== 1) {
+    return done(null, false);
+  }
+  user.deserializeUser()(id, done);
+});
 
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");

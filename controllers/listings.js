@@ -75,16 +75,19 @@ module.exports.update = async (req, res) => {
 
 module.exports.show = async (req, res) => {
   let { id } = req.params;
+  if (mongoose.connection.readyState !== 1) {
+    req.flash("error", "Database is offline. Listing details unavailable right now.");
+    return res.redirect("/listings");
+  }
   const listing = await Listing.findById(id)
     .populate({ path: "reviews", populate: { path: "author" } })
     .populate("owner");
   if (!listing) {
     req.flash("error", " Listing does not exist");
-    res.redirect("/listings");
+    return res.redirect("/listings");
   }
 
   res.render("listing/show.ejs", { listing });
-  console.log(listing);
 };
 
 module.exports.delete = async (req, res) => {
